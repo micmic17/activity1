@@ -1,0 +1,29 @@
+#update_company .form-control {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+#update_company .form-control[name=email], #update_company .form-control[name=website] {
+  font-size: 1rem;
+}
+#update_company .company-logo {
+  position: relative;
+  margin: auto;
+}
+#update_company .company-logo button {
+  position: absolute;
+  top: auto;
+  height: 100%;
+  width: 100%;
+  right: auto;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5rem;
+  background: none;
+  border: 0;
+}
+#update_company .company-logo button:hover {
+  background: rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}

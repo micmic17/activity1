@@ -15,8 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->middleware('guest');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::group(['middleware' => ['web']], function() {
+    Route::resources([
+        'company' => App\Http\Controllers\CompanyController::class,
+        // 'posts' => PostController::class,
+    ]);
+});
