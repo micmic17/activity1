@@ -17,4 +17,9 @@ class Company extends Model
         'image_path',
         'website'
     ];
+
+    public function employees()
+    {
+        return $this->hasMany('App\Models\Employee');
+    }
 }

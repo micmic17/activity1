@@ -8,7 +8,7 @@
 <div class="container">
     <div class="row justify-content-center">
         @if ($company)
-        <div class="col-md-9">
+        <div class="col-md-9 mb-5">
             <div class="card">
                 <div class="card-body text-center">
                     {!! Form::model($company, ['method' => 'PATCH', 'id' => 'update_company','files' => true, 'action' => ['App\Http\Controllers\CompanyController@update', $company->id]]) !!}
@@ -47,6 +47,9 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-9 mb-5">
+            @include('partials.admin._employee', $employees = $company->employees)
+        </div>
         @else
         <h1>Company not found</h1>
         @endif
@@ -56,4 +59,5 @@
 
 @section('scripts')
 <script src="{{ asset('js/admin/profile.js') }}"></script>
+<script src="{{ asset('js/admin/employees.js') }}"></script>
 @stop
