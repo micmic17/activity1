@@ -14,9 +14,8 @@
             {!! Form::close() !!}
             @endif
             @if (!Request::is('home'))
-            <button class="btn btn-primary" data-target="#exampleModal" data-toggle="modal" data-rel="tooltip" data-placement="top" title="Add an employee"><i class="bi bi-plus-circle"></i></button>
-
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <button class="btn btn-primary" data-target="#addEmployeeModal" data-toggle="modal" data-rel="tooltip" data-placement="top" title="Add an employee"><i class="bi bi-plus-circle"></i></button>
+            <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -49,7 +48,7 @@
                                 </div>
 
                                 <!-- Errors -->
-                                <div id="validationField" class="d-none alert" role="alert">
+                                <div class="d-none alert validationField" role="alert">
                                     <ul class="m-0">
                                     </ul>
                                 </div>
@@ -98,8 +97,54 @@
                 <td class="d-flex">
                     {!! Form::open(['method' => 'DELETE', 'action' => ['App\Http\Controllers\EmployeeController@destroy', $employee->id]]) !!}
                     {!! Form::button('<i class="bi bi-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-sm', 'data-rel' => 'tooltip', 'data-placement' => 'top', 'title' => 'Delete ' . $employee->first_name . ' ' . $employee->last_name] ) !!}
-                    <a href="{{ route('employee.show', $employee->id) }}" data-rel="tooltip" data-placement="top" title="Edit {{ $employee->first_name }} {{ $employee->last_name }}" class="btn btn-outline-success btn-sm ml-2"><i class="bi bi-pencil-square"></i></a>
                     {!! Form::close() !!}
+                    <a data-target="#updateEmployee" data-toggle="modal" data-rel="tooltip" data-placement="top" title="Edit {{ $employee->first_name }} {{ $employee->last_name }}" class="btn btn-outline-success btn-sm ml-2"><i class="bi bi-pencil-square"></i></a>
+
+                    <div class="modal fade" id="updateEmployee" tabindex="-1" role="dialog" aria-labelledby="updateEmployeeLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateEmployeeLabel">{{ $company->name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="" id="update_employee_modal">
+                                    <div class="modal-body">
+                                        <div class="input-group">
+                                            <input type="hidden" name="id" value="{{ $employee->id }}">
+                                            <input class="form-control" type="text" value="{{ $employee->first_name }}" name="first_name" placeholder="First Name" required>
+                                            <input class="form-control" type="text" value="{{ $employee->last_name }}" name="last_name" placeholder="Last Name" required>
+                                        </div>
+                                        <div class="input-group">
+                                            {{ csrf_field() }}
+                                        </div>
+                                        <div class="col-auto px-0 mt-3">
+                                            <div class="input-group mb-2 mr-1">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"><i class="bi bi-mailbox"></i></div>
+                                                </div>
+                                                <input class="form-control" type="email" value="{{ $employee->email }}" name="email" placeholder="Email">
+                                                <div class="input-group-prepend ml-1">
+                                                    <div class="input-group-text"><i class="bi bi-telephone"></i></div>
+                                                </div>
+                                                <input class="form-control" type="text" value="{{ $employee->phone }}" name="phone" placeholder="Phone Number">
+                                            </div>
+                                        </div>
+
+                                        <!-- Errors -->
+                                        <div class="d-none alert validationField" role="alert">
+                                            <ul class="m-0">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Update Employee</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 @endif
             </tr>
