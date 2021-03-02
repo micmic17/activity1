@@ -90,10 +90,4 @@ class EmployeeController extends Controller
 
         return redirect('/company/' . $company);
     }
-
-    public function searchEmployee(Request $request)
-    {
-        if ($request->search != 'undefined') {
-        }
-    }
 }

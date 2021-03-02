@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="col-md-9 mb-5">
-            @include('partials.admin._employee', $employees = $company->employees)
+            @include('partials.admin._employee', [$employees, 'url' => 'company'])
         </div>
         @else
         <h1>Company not found</h1>

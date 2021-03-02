@@ -2,10 +2,17 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <div class="card-titl m-0">Employees</div>
         <div class="d-flex">
+            @if (Request::is('home'))
             {!! Form::open(['method' => 'GET', 'route' => 'home', 'class' => 'form-inline mr-3']) !!}
             {!! Form::text('search_employee', null, ['class' => 'form-control mr-sm-2', 'placeholder' => 'Company name']) !!}
             {!! Form::button('<i class="bi bi-search"></i>', ['type' => 'submit', 'class' => 'btn btn-outline-success my-2 my-sm-0'] ) !!}
             {!! Form::close() !!}
+            @else
+            {!! Form::open(['method' => 'GET', 'action' => ['App\Http\Controllers\CompanyController@show', $company->id], 'class' => 'form-inline mr-3']) !!}
+            {!! Form::text('search_employee', null, ['class' => 'form-control mr-sm-2', 'placeholder' => 'Company name']) !!}
+            {!! Form::button('<i class="bi bi-search"></i>', ['type' => 'submit', 'class' => 'btn btn-outline-success my-2 my-sm-0'] ) !!}
+            {!! Form::close() !!}
+            @endif
             @if (!Request::is('home'))
             <button class="btn btn-primary" data-target="#exampleModal" data-toggle="modal" data-rel="tooltip" data-placement="top" title="Add an employee"><i class="bi bi-plus-circle"></i></button>
 
