@@ -7,7 +7,7 @@
             @include('partials.admin._company', $companies)
         </div>
         <div class="col-12">
-            @include('partials.admin._employee')
+            @include('partials.admin._employee', [$employees, 'url' => 'home'])
         </div>
     </div>
 </div>

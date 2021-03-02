@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Employee;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -22,10 +23,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $companies = Company::all();
+        $employees = $request->search_employee == null ? Employee::all() : Employee::search($request->all());
     
-        return view('home', compact('companies'));
+        return view('home', compact('companies', 'employees'));
     }
 }

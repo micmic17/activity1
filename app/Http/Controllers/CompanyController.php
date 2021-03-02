@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateCompanyRequest;
 
 use App\Models\Company;
+use App\Models\Employee;
 
 class CompanyController extends Controller
 {
@@ -51,11 +52,12 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $company = Company::findOrFail($id);
-  
-        return view('company.index', compact('company'));
+        $employees = $request->search_employee == null ? $company->employees()->get() : Employee::search($request->all(), $id);
+
+        return view('company.index', compact('company', 'employees'));
     }
 
     /**

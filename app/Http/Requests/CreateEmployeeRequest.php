@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCompanyRequest extends FormRequest
+class CreateEmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class CreateCompanyRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    {;
         return [
-            'name' => 'required|unique:companies,name',
-            'email' => 'unique:companies,email',
-            'image' => 'dimensions:min_width=100, min_height=100',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'nullable|unique:employees,email,' . request()->company_id,
         ];
 
     }
@@ -34,9 +34,7 @@ class CreateCompanyRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'Name already taken by a different company',
-            'email.unique' => 'Some company already took this email',
-            'image.dimensions' => 'Min dimension is 100x100!',
+            'email.unique' => 'Someone from the company already took this email',
         ];
     }
 }

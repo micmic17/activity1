@@ -15,4 +15,5 @@ mix.js('resources/js/app.js', 'public/js')
   .sass('resources/sass/app.scss', 'public/css')
   .js('resources/js/admin/profile.js', 'public/js/admin')
   .sass('resources/sass/admin/profile.scss', 'public/css/admin')
+  .js('resources/js/admin/employees.js', 'public/js/admin')
   .sourceMaps();

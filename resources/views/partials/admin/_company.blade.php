@@ -29,7 +29,6 @@
                 <td>Logo</td>
                 <td>{{ $company->website }}</td>
                 <td class="d-flex">
-
                     {!! Form::open(['method' => 'DELETE', 'action' => ['App\Http\Controllers\CompanyController@destroy', $company->id]]) !!}
                     {!! Form::button('<i class="bi bi-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-sm', 'data-rel' => 'tooltip', 'data-placement' => 'top', 'title' => 'Delete ' . $company->name] ) !!}
                     {!! Form::close() !!}
