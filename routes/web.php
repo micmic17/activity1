@@ -26,8 +26,5 @@ Route::group(['middleware' => ['web']], function() {
     Route::resources([
         'company' => App\Http\Controllers\CompanyController::class,
         'employee' => App\Http\Controllers\EmployeeController::class,
-        // '/employee/search/comap' => App\Http\Controllers\EmployeeController::class,
     ]);
-
-    // Route::get('/home', [App\Http\Controllers\EmployeeController::class, 'searchEmployee'])->name('search.employee');
 });
