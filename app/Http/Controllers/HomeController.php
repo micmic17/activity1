@@ -25,9 +25,8 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $companies = Company::all();
-        $employees = $request->search_employee == null ? Employee::all() : Employee::search($request->all());
+        $companies = Company::paginate(10);
     
-        return view('home', compact('companies', 'employees'));
+        return view('home', compact('companies'));
     }
 }
