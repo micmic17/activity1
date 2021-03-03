@@ -3,19 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Employee;
 use App\Http\Requests\CreateEmployeeRequest;
+
+use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $employees = $request->has('search_employee') ?
+                        $this->search($request)->paginate(10) :
+                        Employee::paginate(10);
+
+        return view('employee.index', compact('employees'));
     }
 
     /**
@@ -70,7 +79,7 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateEmployeeRequest $request, $id)
     {
         $employee = Employee::findOrFail($id)->update($request->all());
 
@@ -86,10 +95,13 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $employee = Employee::findOrFail($id);
-        $company = $employee->company_id;
         $employee->delete();
 
+        return redirect('/company/' . $employee->company_id);
+    }
 
-        return redirect('/company/' . $company);
+    public function search(Request $request)
+    {
+        return Employee::search($request);
     }
 }

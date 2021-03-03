@@ -22,4 +22,11 @@ class Company extends Model
     {
         return $this->hasMany('App\Models\Employee');
     }
+
+    public function scopeSearch($query, $request)
+    {
+        return $query->orWhere('name', 'LIKE', '%' . $request['search_company'] . '%')
+                    ->orWhere('email', 'LIKE', '%' . $request['search_company'] . '%')
+                    ->orWhere('website', 'LIKE', '%' . $request['search_company'] . '%');
+    }
 }

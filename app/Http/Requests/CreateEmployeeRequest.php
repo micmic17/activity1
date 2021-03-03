@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateEmployeeRequest extends FormRequest
@@ -26,9 +27,12 @@ class CreateEmployeeRequest extends FormRequest
         return [
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'nullable|unique:employees,email,' . request()->company_id,
+            'email' => [
+                Rule::unique('employees', 'email')->where(function ($query) {
+                    return $query->where('company_id', request()->company_id);
+                }),
+            ],
         ];
-
     }
 
     public function messages()

@@ -28,7 +28,6 @@ class CreateCompanyRequest extends FormRequest
             'email' => 'unique:companies,email',
             'image' => 'dimensions:min_width=100, min_height=100',
         ];
-
     }
 
     public function messages()

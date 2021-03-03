@@ -29,7 +29,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-file-image"></i></span>
                 </div>
-                {!! Form::file('image', ['class' => 'form-control h-auto font-12']) !!}
+                {!! Form::file('logo', ['class' => 'form-control h-auto font-12']) !!}
             </div>
         </div>
         @if (count($errors) > 0)
