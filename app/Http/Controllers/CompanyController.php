@@ -55,9 +55,9 @@ class CompanyController extends Controller
     public function show(Request $request, $id)
     {
         $company = Company::findOrFail($id);
-        $employees = $request->search_employee == null ? $company->employees()->get() : Employee::search($request->all(), $id);
+        $employees = $request->search_employee == null ? $company->employees()->paginate(10) : Employee::search($request->all(), $id);
 
-        return view('company.index', compact('company', 'employees'));
+        return view('company.show', compact('company', 'employees'));
     }
 
     /**
@@ -70,7 +70,7 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
   
-        return view('company.index', compact('company'));
+        return view('company.show', compact('company'));
     }
 
     /**
@@ -90,8 +90,9 @@ class CompanyController extends Controller
             $storeImage = $request->except(['image']);
         
         $company->update($storeImage);
+        $employees = $request->search_employee == null ? $company->employees()->paginate(10) : Employee::search($request->all(), $id);
 
-        return view('company.index', compact('company'));
+        return view('company.show', compact('company', 'employees'));
     }
 
     /**

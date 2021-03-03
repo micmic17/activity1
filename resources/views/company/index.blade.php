@@ -1,63 +1,51 @@
-@extends('layouts.app')
-
-@section('css')
-<link rel="stylesheet" href="{{ asset('css/admin/profile.css') }}">
-@endsection
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        @if ($company)
-        <div class="col-md-9 mb-5">
-            <div class="card">
-                <div class="card-body text-center">
-                    {!! Form::model($company, ['method' => 'PATCH', 'id' => 'update_company','files' => true, 'action' => ['App\Http\Controllers\CompanyController@update', $company->id]]) !!}
-                    {{ csrf_field() }}
-                    <div class="company-logo">
-                        <button type="button" id="upload_logo">Upload file</button>
-                        <input name="image" type="file" id="my_file" class="d-none">
-
-                        @if ($company->logo == null || file_exists(asset('/storage/company' .
-                        $company->logo)))
-                        <img id="test" class="card-img-top" src="{{ asset('/storage/default_profile_image.png') }}" alt="default image logo">
-                        @else
-                        <img id="test" class="card-img-top" src="{{ asset('/storage/images/' . $company->image_path) }}" alt="{{ $company->name }}'s logo">
-                        @endif
-                    </div>
-                    <div class="pt-3" id="file_name"></div>
-                    {!! Form::text('name', null, ['class' => 'form-control text-center', 'required' => 'true','placeholder' => 'Company name', 'value' => $company->name]) !!}
-                    {!! Form::text('email', null, ['class' => 'form-control text-center', 'placeholder' => 'Company email', 'value' => $company->email]) !!}
-                    {!! Form::text('website', null, ['class' => 'form-control text-center', 'placeholder' => 'Company website', 'value' => $company->website]) !!}
-                    {!! Form::submit('Update Company', ['class' => 'btn btn-primary']) !!}
-
-                    @if (count($errors) > 0)
-                    <div class="alert alert-danger" role="alert">
-                        <ul class="m-0">
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
-                    {!! Form::close() !!}
-                </div>
-
-                <div class="card-footer text-muted text-right">
-                    Last edited {{ $company->updated_at->diffForHumans() }}
-                </div>
-            </div>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-titl m-0">Companies</div>
+        <div class="d-flex">
+            <form class="form-inline mr-3">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+            </form>
+            <a href="{{ url('/company/create') }}" class="btn btn-primary" data-rel="tooltip" data-placement="top" title="Add a company"><i class="bi bi-plus-circle"></i></a>
         </div>
-        <div class="col-md-9 mb-5">
-            @include('partials.admin._employee', [$employees, 'url' => 'company'])
-        </div>
-        @else
-        <h1>Company not found</h1>
-        @endif
     </div>
-</div>
-@endsection
 
-@section('scripts')
-<script src="{{ asset('js/admin/profile.js') }}"></script>
-<script src="{{ asset('js/admin/employees.js') }}"></script>
-@stop
+    <table class="table mb-0">
+        <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Logo</th>
+                <th>Website</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (count($companies) > 0)
+            @foreach($companies as $company)
+            <tr>
+                <td>{{ $company->name }}</td>
+                <td>{{ $company->email }}</td>
+                <td>Logo</td>
+                <td>{{ $company->website }}</td>
+                <td class="d-flex">
+                    {!! Form::open(['method' => 'DELETE', 'action' => ['App\Http\Controllers\CompanyController@destroy', $company->id]]) !!}
+                    {!! Form::button('<i class="bi bi-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-sm', 'data-rel' => 'tooltip', 'data-placement' => 'top', 'title' => 'Delete ' . $company->name] ) !!}
+                    {!! Form::close() !!}
+                    <a href="{{ route('company.show', $company->id) }}" data-rel="tooltip" data-placement="top" title="Edit {{ $company->name }}" class="btn btn-outline-success btn-sm ml-2"><i class="bi bi-pencil-square"></i></a>
+                </td>
+            </tr>
+            @endforeach
+            @else
+            <tr class="text-center">
+                <td colspan="5">No data found!</td>
+            </tr>
+            @endif
+        </tbody>
+    </table>
+</div>
+
+{{-- Pagination --}}
+<div class="d-flex justify-content-center">
+    {!! $companies->links() !!}
+</div>
