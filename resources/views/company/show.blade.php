@@ -15,7 +15,7 @@
                     {{ csrf_field() }}
                     <div class="company-logo">
                         <button type="button" id="upload_logo">Upload file</button>
-                        <input name="image" type="file" id="my_file" class="d-none">
+                        <input name="logo" type="file" id="my_file" class="d-none">
 
                         @if ($company->logo == null || file_exists(asset('/storage/company' .
                         $company->logo)))
@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="col-md-9 mb-5">
-            @include('employee.index', [$employees, 'url' => 'company'])
+            @include('partials._employee', [$employees])
         </div>
         @else
         <h1>Company not found</h1>
@@ -59,5 +59,5 @@
 
 @section('scripts')
 <script src="{{ asset('js/admin/profile.js') }}"></script>
-<script src="{{ asset('js/admin/employees.js') }}"></script>
+<script src="{{ asset('js/admin/employee.js') }}"></script>
 @stop

@@ -19,12 +19,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
+Route::get('/home', [App\Http\Controllers\CompanyController::class, 'index'])->name('home');
 Route::group(['middleware' => ['web']], function() {
-    Route::resources([
-        'company' => App\Http\Controllers\CompanyController::class,
-        'employee' => App\Http\Controllers\EmployeeController::class,
-    ]);
+    Route::resource('company', App\Http\Controllers\CompanyController::class)->except(['index']);
+    Route::resource('employee', App\Http\Controllers\EmployeeController::class);
 });

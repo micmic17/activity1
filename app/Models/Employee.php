@@ -27,12 +27,14 @@ class Employee extends Model
     public function scopeSearch($query, $request)
     {
         $employee = $query->join('companies','companies.id', 'employees.company_id')
-                    ->orWhere('first_name', 'LIKE', '%' . $request['search_employee'] . '%')
-                    ->orWhere('last_name', 'LIKE', '%' . $request['search_employee'] . '%')
-                    ->orWhere('employees.email', 'LIKE', '%' . $request['search_employee'] . '%')
-                    ->orWhere('phone', 'LIKE', '%' . $request['search_employee'] . '%')
-                    ->having('employees.company_id', '=', $company);
+                    ->orWhere('first_name', 'LIKE', '%' . $request->search_employee . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $request->search_employee . '%')
+                    ->orWhere('employees.email', 'LIKE', '%' . $request->search_employee . '%')
+                    ->orWhere('phone', 'LIKE', '%' . $request->search_employee . '%');
 
-        return $employee->paginate(10);
+        if ($request->route('company')) $employee->having('employees.company_id', '=', $request->route('company'));
+        else $employee->orWhere('companies.name', 'LIKE', '%' . $request->search_employee . '%');
+
+        return $employee;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Storage;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCompanyRequest;
 
@@ -11,14 +10,22 @@ use App\Models\Employee;
 
 class CompanyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $companies = $request->has('search_company') ?
+                        $this->search($request)->paginate(10) :
+                        Company::paginate(10);
+    
+        return view('company.index', compact('companies'));
     }
 
     /**
@@ -39,7 +46,9 @@ class CompanyController extends Controller
      */
     public function store(CreateCompanyRequest $request)
     {
-        $storeImage = $this->storeImage($request);
+        $storeImage = $request->has('logo') ?
+                        $this->storeImage($request->all()) :
+                        $request->all();
  
         $company = Company::create($storeImage);
 
@@ -55,7 +64,7 @@ class CompanyController extends Controller
     public function show(Request $request, $id)
     {
         $company = Company::findOrFail($id);
-        $employees = $request->search_employee == null ? $company->employees()->paginate(10) : Employee::search($request->all(), $id);
+        $employees = $this->searchEmployees($request, $company);
 
         return view('company.show', compact('company', 'employees'));
     }
@@ -80,19 +89,19 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateCompanyRequest $request, $id)
     {
         $company = Company::findOrFail($id);
-
-        if ($request->image != null && $company->logo != $request->file('image')->getClientOriginalName())
-            $storeImage = $this->storeImage($request);
+        $storeImage = $request->all();
+  
+        if ($request->has('logo') && $company->logo != $request->file('logo')->getClientOriginalName())
+            $storeImage = $this->storeImage($request->all());
         else
-            $storeImage = $request->except(['image']);
+            $storeImage['logo'] = $company->logo;
         
         $company->update($storeImage);
-        $employees = $request->search_employee == null ? $company->employees()->paginate(10) : Employee::search($request->all(), $id);
 
-        return view('company.show', compact('company', 'employees'));
+        return redirect()->to('company/' . $company->id)->with(['company']);
     }
 
     /**
@@ -108,20 +117,30 @@ class CompanyController extends Controller
         return redirect('/home');
     }
 
-    // Store image to storage:link
-    protected function storeImage($request)
+    public function search(Request $request)
     {
-        $file = $request->file('image');
+        return Company::search($request->all());
+    }
 
-        if ($file) {
-            $path = $file->store('images');
-            $request->request->add(['image_path' => str_replace('images/', '', $path)]);
-            $request->request->add(['logo' => $file->getClientOriginalName()]);
-        } else {
-            $request->request->add(['image_path' => '']);
-            $request->request->add(['logo' => '']);
+    protected function searchEmployees($request, $company)
+    {
+        $employee = $company->employees()->paginate(10);
+ 
+        if ($request->has('search_employee')) {
+            $employee = Employee::search($request)->paginate(10);
+            $employee->appends(['search_employee' => $request->search_employee]);
         }
 
-        return $request->except(['image']);
+        return $employee;
+    }
+
+    // Store image to storage
+    protected function storeImage($request)
+    {
+        $path = $request['logo']->store('images');
+        $request['image_path'] = str_replace('images/', '', $path);
+        $request['logo'] = $request['logo']->getClientOriginalName();
+
+        return $request;
     }
 }
