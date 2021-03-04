@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateEmployeeRequest extends FormRequest
+class UpdateCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,22 +22,20 @@ class CreateEmployeeRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {;
+    {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => [
-                Rule::unique('employees', 'email')->where(function ($query) {
-                    return $query->where('company_id', request()->company_id);
-                }),
-            ],
+            'name' => 'required',
+            'email' => 'required',
+            'image' => 'mimes:jpeg, bmp, png|dimensions:min_width=100, min_height=100',
         ];
     }
 
     public function messages()
     {
         return [
-            'email.unique' => 'Someone from the company already took this email',
+            'name.unique' => 'Name already taken by a different company',
+            'email.unique' => 'Some company already took this email',
+            'image.dimensions' => 'Min dimension is 100x100!',
         ];
     }
 }

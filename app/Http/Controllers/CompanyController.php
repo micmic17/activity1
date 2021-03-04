@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 
 use App\Models\Company;
 use App\Models\Employee;
@@ -47,7 +48,7 @@ class CompanyController extends Controller
     public function store(CreateCompanyRequest $request)
     {
         $storeImage = $request->has('logo') ?
-                        $this->storeImage($request->all()) :
+                        storeImage($request->all()) :
                         $request->all();
  
         $company = Company::create($storeImage);
@@ -61,9 +62,8 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, Company $company)
     {
-        $company = Company::findOrFail($id);
         $employees = $this->searchEmployees($request, $company);
 
         return view('company.show', compact('company', 'employees'));
@@ -75,10 +75,8 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Company $company)
     {
-        $company = Company::findOrFail($id);
-  
         return view('company.show', compact('company'));
     }
 
@@ -89,13 +87,12 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateCompanyRequest $request, $id)
+    public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $company = Company::findOrFail($id);
         $storeImage = $request->all();
   
         if ($request->has('logo') && $company->logo != $request->file('logo')->getClientOriginalName())
-            $storeImage = $this->storeImage($request->all());
+            $storeImage = storeImage($request->all());
         else
             $storeImage['logo'] = $company->logo;
         
@@ -110,9 +107,9 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        $company = Company::findOrFail($id)->delete();
+        $company->delete();
 
         return redirect('/home');
     }
@@ -132,15 +129,5 @@ class CompanyController extends Controller
         }
 
         return $employee;
-    }
-
-    // Store image to storage
-    protected function storeImage($request)
-    {
-        $path = $request['logo']->store('images');
-        $request['image_path'] = str_replace('images/', '', $path);
-        $request['logo'] = $request['logo']->getClientOriginalName();
-
-        return $request;
     }
 }

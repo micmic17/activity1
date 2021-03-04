@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateEmployeeRequest;
+use App\Http\Requests\EmployeeRequest;
 
 use App\Models\Employee;
 
@@ -43,7 +43,7 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateEmployeeRequest $request)
+    public function store(EmployeeRequest $request)
     {
         $employee = Employee::create($request->all());
 
@@ -79,9 +79,9 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateEmployeeRequest $request, $id)
+    public function update(EmployeeRequest $request, Employee $employee)
     {
-        $employee = Employee::findOrFail($id)->update($request->all());
+        $employee->update($request->all());
 
         return response()->json($employee);
     }
@@ -92,9 +92,8 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
-        $employee = Employee::findOrFail($id);
         $employee->delete();
 
         return redirect('/company/' . $employee->company_id);
