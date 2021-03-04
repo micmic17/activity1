@@ -20,13 +20,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['cors', 'json.response']], function () {
     // Public routes
-    Route::get('/login', 'App\Http\Controllers\API\AuthController@login')->name('login.api');
+    Route::post('/login', 'App\Http\Controllers\API\AuthController@login')->name('login.api');
 
     // Authenticated Routes
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/logout', 'App\Http\Controllers\API\AuthController@logout')->name('logout.api');
 
         Route::resource('company', App\Http\Controllers\CompanyController::class);
-        // Route::resource('employee', App\Http\Controllers\EmployeeController::class);
+        Route::resource('employee', App\Http\Controllers\EmployeeController::class);
     });
 });
