@@ -10,10 +10,10 @@ class DatabaseSeeder extends Seeder
     {
         $roles = ['admin', 'users'];
 
-        \App\Models\Role::factory(2)->create()->each(function($role, $index) use($roles) {
-            $role->name = $roles[$index];
-            $role->save();
-        });
+        $role = \App\Models\Role::factory(2)->create()->each(function($role, $index) use($roles) {
+                    $role->name = $roles[$index];
+                    $role->save();
+                });
 
         \App\Models\User::factory(1)->create()->each(function($user, $index) {
             $user->name = 'Admin User';

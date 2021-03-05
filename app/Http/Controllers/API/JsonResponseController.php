@@ -23,7 +23,7 @@ class JsonResponseController extends Controller
             'response' => $error,
         ];
 
-        if (count($messages) > 0) $response['messages'] = $messages;
+        if (count($messages) > 0) $response['message'] = $messages;
 
         return response()->json($response, $code);
     }

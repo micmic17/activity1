@@ -25,7 +25,7 @@ class CreateCompanyRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:companies,name',
-            'email' => 'requierd|unique:companies,email',
+            'email' => 'required|unique:companies,email',
             'image' => 'mimes:jpeg, bmp, png|dimensions:min_width=100, min_height=100',
         ];
     }
