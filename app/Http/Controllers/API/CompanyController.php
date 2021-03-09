@@ -49,9 +49,13 @@ class CompanyController extends JsonResponseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show($id)
     {
-        return $this->successResponse(new CompanyResource($company), 'Companies Retrieved');
+        $company = Company::find($id);
+
+        if ($company) {
+            return $this->successResponse(new CompanyResource($company), 'Companies Retrieved');
+        } else  return $this->errorResponse('', ['Company not found!'], 404);
     }
 
     /**
@@ -61,9 +65,22 @@ class CompanyController extends JsonResponseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompanyRequest $request, $id)
     {
-        return $this->successResponse(new CompanyResource($company), 'Companies Successfully Updated');
+        $company = Company::find($id);
+
+        if ($company) {
+            $storeImage = $request->all();
+
+            if ($request->has('logo') && $company->logo != $request->file('logo')->getClientOriginalName())
+                $storeImage = storeImage($request->all());
+            else
+                $storeImage['logo'] = $company->logo;
+            
+            $company->update($storeImage);
+
+            return $this->successResponse(new CompanyResource($company), 'Companies Successfully Updated');
+        } else  return $this->errorResponse('Update Failed', ['Company not found!'], 404);
     }
 
     /**
@@ -72,10 +89,14 @@ class CompanyController extends JsonResponseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy($id)
     {
-        $company->delete();
+        $company = Company::find($id);
 
-        return $this->successResponse([], 'Companies Retrieved');
+        if ($company) {
+            $company->delete();
+    
+            return $this->successResponse([], 'Companies Retrieved');
+        } else  return $this->errorResponse('Deleting Failed', ['Company not found!'], 404);
     }
 }

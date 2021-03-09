@@ -17,7 +17,7 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('api')->check() && $request->user()->isAdmin()) {
+        if (Auth::guard('api')->check() && Auth::guard('api')->user()->isAdmin()) {
             return $next($request);
         } else {
             $message = ["message" => "Permission Denied"];

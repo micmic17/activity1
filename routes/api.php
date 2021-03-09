@@ -19,12 +19,9 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login'])->name('login.api');
 
     // Authenticated Routes
-    Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['api.admin']], function () {
+        Route::apiResource('company', App\Http\Controllers\API\CompanyController::class);
+        Route::apiResource('employee', App\Http\Controllers\API\EmployeeController::class);
         Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout'])->name('logout.api');
-    
-        Route::group(['middleware' => ['api.admin']], function () {
-            Route::apiResource('company', App\Http\Controllers\API\CompanyController::class);
-            Route::apiResource('employee', App\Http\Controllers\API\EmployeeController::class);
-        });
     });
 });

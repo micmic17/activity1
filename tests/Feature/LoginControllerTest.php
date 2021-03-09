@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,6 +12,37 @@ use Tests\TestCase;
 
 class LoginControllerTest extends TestCase
 {
+    private function getCorrectEmail()
+    {
+        return TestCase::getCorrectEmailAttribute();
+    }
+
+    private function getFakeEmail()
+    {
+        return TestCase::getFakeEmailAttribute();
+    }
+
+    private function getCorrectPassword()
+    {
+        return TestCase::getCorrectPasswordAttribute();
+    }
+
+    private function getFakePassword()
+    {
+        return TestCase::getFakePasswordAttribute();
+    }
+
+    /**
+     * @test
+     */
+    public function login_displays_the_login_form()
+    {
+        $response = $this->get(route('login'));
+
+        $response->assertStatus(200);
+        $response->assertViewIs('auth.login');
+    }
+
     /**
      * @test
      */
@@ -35,8 +67,8 @@ class LoginControllerTest extends TestCase
     public function enter_non_existing_email()
     {
         $this->json('POST', 'api/login', [
-            'email' => 'test@test.com',
-            'password' => 'password',
+            'email' => $this->getFakeEmail(),
+            'password' => $this->getCorrectPassword(),
         ])->assertStatus(404)
             ->assertJson([
                 "response" => "Login Failed",
@@ -50,8 +82,8 @@ class LoginControllerTest extends TestCase
     public function enter_incorrect_password()
     {
         $this->json('POST', 'api/login', [
-            'email' => 'admin@admin.com',
-            'password' => 'wrongpassword',
+            'email' => $this->getCorrectEmail(),
+            'password' => $this->getFakePassword(),
         ])->assertStatus(422)
             ->assertJson([
                 "response" => "Login Failed",
@@ -65,8 +97,8 @@ class LoginControllerTest extends TestCase
     public function user_successfully_log_in()
     {
         $this->json('POST', 'api/login', [
-            'email' => 'admin@admin.com',
-            'password' => 'password'
+            'email' => $this->getCorrectEmail(),
+            'password' => $this->getCorrectPassword(),
         ])->assertStatus(200)
             ->assertJsonStructure([
             "data" => [

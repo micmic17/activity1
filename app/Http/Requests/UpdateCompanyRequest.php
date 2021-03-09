@@ -26,7 +26,7 @@ class UpdateCompanyRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required',
-            'image' => 'mimes:jpeg, bmp, png|dimensions:min_width=100, min_height=100',
+            'logo' => 'mimes:jpeg, bmp, png|dimensions:min_width=100, min_height=100',
         ];
     }
 
@@ -35,7 +35,7 @@ class UpdateCompanyRequest extends FormRequest
         return [
             'name.unique' => 'Name already taken by a different company',
             'email.unique' => 'Some company already took this email',
-            'image.dimensions' => 'Min dimension is 100x100!',
+            'logo.dimensions' => 'Min dimension is 100x100!',
         ];
     }
 }
