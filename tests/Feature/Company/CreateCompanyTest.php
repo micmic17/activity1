@@ -26,9 +26,7 @@ class CreateCompanyTest extends TestCase
         Artisan::call('storage:link');
 
         $this->user = User::whereEmail('admin@admin.com')->first();
-
         $file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
-        
         $this->data = [
             'name' => $this->faker->company,
             'email' => $this->faker->companyEmail,
@@ -42,7 +40,7 @@ class CreateCompanyTest extends TestCase
     public function login_user_can_create_company()
     {
         $this->withOutExceptionHandling();
-        
+    
         $response = $this->actingAs($this->user, 'api')->json('POST', '/api/company', $this->data);
 
         $response->assertStatus(200)

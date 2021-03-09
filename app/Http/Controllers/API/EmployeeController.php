@@ -44,9 +44,13 @@ class EmployeeController extends JsonResponseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee)
+    public function show($id)
     {
-        return $this->successResponse(new EmployeeResource($employee), 'Employees updated successfully');
+        $employee = Employee::find($id);
+
+        if ($employee) {
+            return $this->successResponse(new EmployeeResource($employee), 'Employee Retrieved');
+        } else  return $this->errorResponse('', ['Employee not found!'], 404);
     }
 
     /**
@@ -56,11 +60,15 @@ class EmployeeController extends JsonResponseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EmployeeRequest $request, Employee $employee)
+    public function update(EmployeeRequest $request, $id)
     {
-        $employee->update($request->all());
+        $employee = Employee::find($id);
 
-        return $this->successResponse(new EmployeeResource($employee), 'Employees updated successfully');
+        if ($employee) {
+            $employee->update($request->all());
+
+            return $this->successResponse(new EmployeeResource($employee), 'Employees updated successfully');
+        } else  return $this->errorResponse('Update Failed', ['Employee not found!'], 404);
     }
 
     /**
@@ -69,11 +77,14 @@ class EmployeeController extends JsonResponseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        $employee->delete();
+        $employee = Employee::find($id);
 
+        if ($employee) {
+            $employee->delete();
 
-        return $this->successResponse(new EmployeeResource($employee), 'Employees deleted successfully');
+            return $this->successResponse(new EmployeeResource($employee), 'Employees deleted successfully');
+        } else  return $this->errorResponse('Deleting Failed', ['Employee not found!'], 404);
     }
 }

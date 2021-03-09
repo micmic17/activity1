@@ -27,9 +27,7 @@ class UpdateCompanyTest extends TestCase
         Artisan::call('storage:link');
 
         $this->user = User::whereEmail('admin@admin.com')->first();
-
         $this->file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
-        
         $this->data = [
             'name' => $this->faker->company,
             'email' => $this->faker->companyEmail,
@@ -45,13 +43,11 @@ class UpdateCompanyTest extends TestCase
      */
     public function login_user_can_update_company()
     {
-        $newData = [
+        $response = $this->actingAs($this->user, 'api')->json('PATCH', '/api/company/' . $this->id, [
             'name' => $this->faker->company,
             'email' => $this->faker->companyEmail,
             'logo' => UploadedFile::fake()->image('avatar.jpg', 100, 100)
-        ];
-    
-        $response = $this->actingAs($this->user, 'api')->json('PATCH', '/api/company/' . $this->id, $newData);
+        ]);
 
         $response->assertStatus(200)
                 ->assertJsonStructure([

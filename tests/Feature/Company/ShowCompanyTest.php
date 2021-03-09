@@ -26,16 +26,12 @@ class ShowCompanyTest extends TestCase
         Artisan::call('storage:link');
 
         $this->user = User::whereEmail('admin@admin.com')->first();
-
         $this->file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
-        
-        $data = [
+        $company = $this->actingAs($this->user, 'api')->json('POST', '/api/company', [
             'name' => $this->faker->company,
             'email' => $this->faker->companyEmail,
             'logo' => $this->file
-        ];
-
-        $company = $this->actingAs($this->user, 'api')->json('POST', '/api/company', $data);
+        ]);
         $this->id = $company->original['data']->id;
     }
 
