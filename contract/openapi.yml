@@ -1,0 +1,1029 @@
+openapi: 3.0.0
+# openapi: 3.1.0 # originally
+info:
+  title: 'API Training'
+  version: 1.0.0-oas3
+  # version: 1.0.0 # originally
+  description: 'Laravel Training'
+  contact: { name: 'Mickale L. Saturre', email: mickale_saturr@ligph.com, url: github.com/micmic17 }
+servers:
+  - { url: 'http://localhost/api', description: 'Local url for testing' }
+security:
+  - application:
+    - read
+    - write
+paths:
+  /login:
+    post:
+      summary: Server login route
+      description: >-
+        This is the login route of the applicaiton.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object 
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: Access token of logged in user
+                      name:
+                        type: string
+                        description: Full name of logged in user
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  /logout:
+    post:
+      summary: Server logout route
+      description: >-
+        This is the logout route of the applicaiton.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+#  -------- Start of Company  --------
+  /company:
+  #  -------- Start of index  --------
+    get:
+      description: This is the route for the index page of the company
+      parameters:
+        - name: search_company
+          in: query
+          description: Search a company that is LIKE the query
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Specifies the page number of the companies to be displayed
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for company (primary key)
+                        name:
+                          type: string
+                          description: Company name
+                        email:
+                          type: string
+                          description: Company email
+                        logo:
+                          type: string
+                          description: Image name of the logo of the company
+                        image_path:
+                          type: string
+                          description: The path or the hashed name of the image
+                        website:
+                          type: string
+                          description: The website link of the company
+                        created_at:
+                          type: string
+                          description: The date the company was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the company was deleted
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  #  -------- End of index  --------
+  #  -------- Start of add company  --------
+    post:
+      description: Lets a admin post a new company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object 
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                logo:
+                  type: string
+                website:
+                  type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for company (primary key)
+                        name:
+                          type: string
+                          description: Company name
+                        email:
+                          type: string
+                          description: Company email
+                        logo:
+                          type: string
+                          description: Image name of the logo of the company
+                        image_path:
+                          type: string
+                          description: The path or the hashed name of the image
+                        website:
+                          type: string
+                          description: The website link of the company
+                        created_at:
+                          type: string
+                          description: The date the company was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the company was deleted
+                  message:
+                    type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  #  -------- End of add company  --------
+  #  -------- Start of update company  --------
+  /company/{update}:
+    patch:
+      description: Lets a admin update a company
+      parameters:
+        - name: update
+          required: true
+          in: path
+          description: Specify what company id to update, {update} in path is the company id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for company (primary key)
+                        name:
+                          type: string
+                          description: Company name
+                        email:
+                          type: string
+                          description: Company email
+                        logo:
+                          type: string
+                          description: Image name of the logo of the company
+                        image_path:
+                          type: string
+                          description: The path or the hashed name of the image
+                        website:
+                          type: string
+                          description: The website link of the company
+                        created_at:
+                          type: string
+                          description: The date the company was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the company was deleted
+                  message:
+                    type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  #  -------- End of update company  --------
+  #  -------- Start of delete company  --------
+  /company/{delete}:
+    delete:
+      description: Lets a admin delete a company
+      parameters:
+        - name: delete
+          required: true
+          in: path
+          description: Specify what company id to delete, {delete} in path is the company id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted a company
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+    #  -------- End of delete company  --------
+  /company/{id}:
+    #  -------- Start of show single company  --------
+    get:
+      description: This is the route for the show specific company details
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Specify what company id to show
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for company (primary key)
+                        name:
+                          type: string
+                          description: Company name
+                        email:
+                          type: string
+                          description: Company email
+                        logo:
+                          type: string
+                          description: Image name of the logo of the company
+                        image_path:
+                          type: string
+                          description: The path or the hashed name of the image
+                        website:
+                          type: string
+                          description: The website link of the company
+                        created_at:
+                          type: string
+                          description: The date the company was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the company was deleted
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+    #  -------- End of show single company  --------
+#  -------- End of Company  --------
+
+#  -------- Start of Employee  --------
+  /employee:
+  #  -------- Start of index  --------
+    get:
+      description: This is the route for the index page of the employee
+      parameters:
+        - name: search_employee
+          in: query
+          description: Search a employee that is LIKE the query
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Specifies the page number of the employees to be displayed
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for employee (primary key)
+                        first_name:
+                          type: string
+                          description: Employee first name
+                        last_name:
+                          type: string
+                          description: Employee last name
+                        email:
+                          type: string
+                          description: Employee email
+                        phone:
+                          type: string
+                          description: Employee phone number
+                        created_at:
+                          type: string
+                          description: The date the company was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the company was deleted
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  #  -------- End of index  --------
+  #  -------- Start of add employee  --------
+    post:
+      description: Lets a admin post a new employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object 
+              required:
+                - first_name
+                - last_name
+                - email
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for employee (primary key)
+                        first_name:
+                          type: string
+                          description: Employee first name
+                        last_name:
+                          type: string
+                          description: Employee last name
+                        email:
+                          type: string
+                          description: Employee email
+                        phone:
+                          type: string
+                          description: Employee phone number
+                        created_at:
+                          type: string
+                          description: The date the employee was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the employee was deleted
+                  message:
+                    type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  #  -------- End of add employee  --------
+  #  -------- Start of update employee  --------
+  /employee/{update}:
+    patch:
+      description: Lets a admin update a employee
+      parameters:
+        - name: update
+          required: true
+          in: path
+          description: Specify what employee id to update, {update} in path is the company id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for employee (primary key)
+                        first_name:
+                          type: string
+                          description: Employee first name
+                        last_name:
+                          type: string
+                          description: Employee last name
+                        email:
+                          type: string
+                          description: Employee email
+                        phone:
+                          type: string
+                          description: Employee phone number
+                        created_at:
+                          type: string
+                          description: The date the employee was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the employee was deleted
+                  message:
+                    type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+  #  -------- End of update employee  --------
+  #  -------- Start of delete employee  --------
+  /employee/{delete}:
+    delete:
+      description: Lets a admin delete a employee
+      parameters:
+        - name: delete
+          required: true
+          in: path
+          description: Specify what employee id to delete, {delete} in path is the employee id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted a employee
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+    #  -------- End of delete employee  --------
+  /employee/{id}:
+    #  -------- Start of show single employee  --------
+    get:
+      description: This is the route for the show specific employee details
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Specify what employee id to show
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The id incremently generated for employee (primary key)
+                        first_name:
+                          type: string
+                          description: Employee first name
+                        last_name:
+                          type: string
+                          description: Employee last name
+                        email:
+                          type: string
+                          description: Employee email
+                        phone:
+                          type: string
+                          description: Employee phone number
+                        created_at:
+                          type: string
+                          description: The date the employee was added/created
+                        deleted_at:
+                          type: string
+                          description: The date the employee was deleted
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                  message:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+    #  -------- End of show single employee  --------
+#  -------- End of Employee  --------
+components:
+  securitySchemes:
+    application:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: 'http://localhost/oauth/token'
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources

@@ -17,7 +17,8 @@
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
-        "laravelcollective/html": "^6.2"
+        "laravelcollective/html": "^6.2",
+        "primitive/openapi-initializer": "^1.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
