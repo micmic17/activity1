@@ -19,8 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
 Route::get('/home', [App\Http\Controllers\CompanyController::class, 'index'])->name('home');
-Route::group(['middleware' => ['web']], function() {
+
+Route::group(['middleware' => ['web', 'IsAdmin']], function() {
     Route::resource('company', App\Http\Controllers\CompanyController::class)->except(['index']);
     Route::resource('employee', App\Http\Controllers\EmployeeController::class);
 });

@@ -6,7 +6,7 @@ use Auth;
 use Closure;
 use Illuminate\Http\Request;
 
-class IsAdmin
+class AdminAuth
 {
     /**
      * Handle an incoming request.
@@ -17,10 +17,12 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->isAdmin()) {
-            Auth::logout();
+        if (Auth::guard('api')->check() && Auth::guard('api')->user()->isAdmin()) {
+            return $next($request);
+        } else {
+            $message = ["message" => "Permission Denied"];
 
-            return redirect('login');
-        } else return $next($request);
+            return response($message, 401);
+        }
     }
 }

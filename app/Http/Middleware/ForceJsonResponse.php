@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
 
-class IsAdmin
+class ForceJsonResponse
 {
     /**
      * Handle an incoming request.
@@ -17,10 +16,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->isAdmin()) {
-            Auth::logout();
+        $request->headers->set('Accept', 'application/json');
 
-            return redirect('login');
-        } else return $next($request);
+        return $next($request);
     }
 }

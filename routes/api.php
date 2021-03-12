@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['cors', 'json.response']], function () {
+    // Public routes
+    Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login'])->name('login.api');
+
+    // Authenticated Routes
+    Route::group(['middleware' => ['api.admin']], function () {
+        Route::apiResource('company', App\Http\Controllers\API\CompanyController::class);
+        Route::apiResource('employee', App\Http\Controllers\API\EmployeeController::class);
+        Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout'])->name('logout.api');
+    });
 });
